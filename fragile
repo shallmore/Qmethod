@@ -1,0 +1,26 @@
+install.packages("readxl")
+library(readxl)
+setwd("E:\\R4D")
+data = read_excel("test.xlsx",sheet = 1) #读取数据
+data[,3 : 50] <- lapply(data[, 3 : 50], as.numeric) # 转换数据，指定列
+warnings() # 知道数据有问题
+data = as.data.frame(lapply(data,as.numeric))
+options(digits = 16) # 设置加小数点16位数
+sum(is.na(data$v1_1_1))
+sum(is.na(data))
+which(rowSums(is.na(data))==0) # 查看哪一行有缺失值，发现几乎都有
+which(colSums(is.na(data))==0) # 查看哪一列有缺失值
+data1 <- data[-1883, -2]
+dwt <- data[1,] # 权重单独作为一个数据
+data1 <- data1[-1, ] # 删掉权重行，构建整洁格式数据
+
+
+
+
+if(data1$v1_1_1 == 0 & data1$v1_1_2 != 0) {
+  data1$v1_1 <- data1$v1_1_2 * (dwt$v1_1_2 / dwt$v1_1_2)
+} else if(data1$v1_1_2 == 0 & data1$v1_1_1 != 0) {
+  data1$v1_1 <- data1$v1_1_1 * (dwt$v1_1_1 / dwt$v1_1_1)
+} else {
+  data1$v1_1 <- (data1$v1_1_1 * (dwt$v1_1_1 / dwt$v1_1_1 +  dwt$v1_1_2)) +(data1$v1_1_2 * (dwt$v1_1_2 / dwt$v1_1_1 +  dwt$v1_1_2))
+}
