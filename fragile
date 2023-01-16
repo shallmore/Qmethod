@@ -13,7 +13,8 @@ which(colSums(is.na(data))==0) # 查看哪一列有缺失值
 data1 <- data[-1883, -2]
 dwt <- data[1,] # 权重单独作为一个数据
 data1 <- data1[-1, ] # 删掉权重行，构建整洁格式数据
-
+data2 <- transform(data1, 
+			w1_1_1 == dwt$v1_1_1)
 
 
 
